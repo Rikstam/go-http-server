@@ -140,9 +140,7 @@ func TestLeague(t *testing.T) {
 
 		assertLeague(t, got, wantedLeague)
 
-		if response.Result().Header.Get("content-type") != "application/json" {
-			t.Errorf("response did not have content-type of application/json, got %v", response.Result().Header)
-		}
+		assertContentType(t, response, jsonContentType)
 	})
 }
 
@@ -168,4 +166,12 @@ func assertLeague(t testing.TB, got, want []Player) {
 func newLeagueRequest() *http.Request {
 	req, _ := http.NewRequest(http.MethodGet, "/league", nil)
 	return req
+}
+
+//server_test.go
+func assertContentType(t testing.TB, response *httptest.ResponseRecorder, want string) {
+	t.Helper()
+	if response.Result().Header.Get("content-type") != want {
+		t.Errorf("response did not have content-type of %s, got %v", want, response.Result().Header)
+	}
 }
