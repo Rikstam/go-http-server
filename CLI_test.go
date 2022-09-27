@@ -1,30 +1,33 @@
 // CLI_test.go
-package poker
+package poker_test
 
 import (
 	"strings"
 	"testing"
+
+	poker "github.com/Rikstam/go-http-server"
 )
 
 func TestCLI(t *testing.T) {
-	in := strings.NewReader("Chris wins\n")
-	playerStore := &StubPlayerStore{}
+	t.Run("record chris win from user input", func(t *testing.T) {
+		in := strings.NewReader("Chris wins\n")
+		playerStore := &poker.StubPlayerStore{}
 
-	cli := &CLI{playerStore, in}
-	cli.PlayPoker()
+		cli := &poker.CLI{playerStore, in}
+		cli.PlayPoker()
 
-	assertPlayerWin(t, playerStore, "Chris")
+		poker.AssertPlayerWin(t, playerStore, "Chris")
+	})
 
-}
+	t.Run("record cleo win from user input", func(t *testing.T) {
+		in := strings.NewReader("Cleo wins\n")
+		playerStore := &poker.StubPlayerStore{}
 
-func assertPlayerWin(t testing.TB, store *StubPlayerStore, winner string) {
-	t.Helper()
+		cli := &poker.CLI{playerStore, in}
+		cli.PlayPoker()
 
-	if len(store.winCalls) != 1 {
-		t.Fatal("expected a win call but didn't get any")
-	}
+		poker.AssertPlayerWin(t, playerStore, "Cleo")
 
-	if store.winCalls[0] != winner {
-		t.Errorf("didn't store correct winner, got %q, want %q", store.winCalls[0], winner)
-	}
+	})
+
 }

@@ -10,25 +10,6 @@ import (
 	"testing"
 )
 
-type StubPlayerStore struct {
-	scores   map[string]int
-	winCalls []string
-	league   League
-}
-
-func (s *StubPlayerStore) GetLeague() League {
-	return s.league
-}
-
-func (s *StubPlayerStore) GetPlayerScore(name string) int {
-	score := s.scores[name]
-	return score
-}
-
-func (s *StubPlayerStore) RecordWin(name string) {
-	s.winCalls = append(s.winCalls, name)
-}
-
 func TestGETPlayers(t *testing.T) {
 	store := StubPlayerStore{
 		map[string]int{
@@ -144,7 +125,7 @@ func TestLeague(t *testing.T) {
 	})
 }
 
-//server_test.go
+// server_test.go
 func getLeagueFromResponse(t testing.TB, body io.Reader) (league []Player) {
 	t.Helper()
 	err := json.NewDecoder(body).Decode(&league)
@@ -168,7 +149,7 @@ func newLeagueRequest() *http.Request {
 	return req
 }
 
-//server_test.go
+// server_test.go
 func assertContentType(t testing.TB, response *httptest.ResponseRecorder, want string) {
 	t.Helper()
 	if response.Result().Header.Get("content-type") != want {
